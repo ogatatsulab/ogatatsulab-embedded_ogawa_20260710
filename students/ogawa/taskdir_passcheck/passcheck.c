@@ -2,6 +2,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define SIZE_BUF 32
+
 
 
 // Function Prototype
@@ -12,7 +14,7 @@ void err_detail( void );
 
 
 // Global Variable
-char password[ 32 ];
+char password[ SIZE_BUF ];
 int ok_len = 0;   // •¶š”8-20
 int ok_low = 0;   // ¬•¶š‚ ‚è
 int ok_up = 0;    // ‘å•¶š‚ ‚è
