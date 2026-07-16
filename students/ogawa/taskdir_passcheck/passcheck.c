@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define SIZE_BUF 32
+#define SIZE_BUF 32 // まぁこれを256とかにしてればいいのではないかと
 
 
 
@@ -39,6 +39,9 @@ int main( void ) {
       err_detail();
     }
 
+    // #応用発展編（でもこれは後々意識しなければならない）
+    // #これはなに？（入力されたパスワードが長くて文字列変数に入りきらない場合)
+    // OSの入力バッファに入力された文字列が残っていて次回fgets()で読み取ってしまう
     if ( ! strchr( password, '\n' ) ) { // 読み込んだパスワードに改行が含まれていないなら
       while( getchar() != '\n' ); // 入力バッファクリア
     }
