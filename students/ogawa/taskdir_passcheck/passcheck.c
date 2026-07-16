@@ -53,7 +53,7 @@ int main( void ) {
 
 int check_pass( void ) {
 
-// パスワード長
+  // パスワード長
   if ( strlen( password ) >= 8 && strlen( password ) <= 20 ) {
     ok_len = 1;
   }
