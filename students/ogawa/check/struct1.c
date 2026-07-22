@@ -21,6 +21,8 @@ int main( void ) {
     
   // ポインタを使用して、配列studentsの2番要素（今回だと60）を表示させてください。
   printf( "配列studentsの2番要素は%d\n", *( students + 2 ) );
+
+  printf( "%d\n", sizeof( struct Person ) );  
     
   return 0;
 }
