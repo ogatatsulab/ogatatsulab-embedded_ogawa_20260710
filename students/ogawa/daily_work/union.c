@@ -19,6 +19,8 @@ int main( void ) {
   s.floatVal = 3.14;
   printf( "s.floatVal = %.2f\n", s.floatVal );
 
+  s.intVal = 123;
+
   printf( "====\n" );
   printf( "s.intVal = %d\n", s.intVal );
   printf( "s.charVal = %c\n", s.charVal );

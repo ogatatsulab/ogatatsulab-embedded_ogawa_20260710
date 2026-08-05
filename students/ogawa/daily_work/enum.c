@@ -10,9 +10,12 @@ int main( void ) {
 
   int input;
 
+  // printf( "好きな色は? 0:red, 1:green, 2:blue\n" );
+  // scanf( "%d", &input );
+  // enum Color favorite = (enum Color)input;  // キャストはなくてもよい
+  enum Color favorite;
   printf( "好きな色は? 0:red, 1:green, 2:blue\n" );
-  scanf( "%d", &input );
-  enum Color favorite = input;  // キャストはなくてもよい
+  scanf( "%d", &favorite );
 
   switch ( favorite ) {
     case RED:

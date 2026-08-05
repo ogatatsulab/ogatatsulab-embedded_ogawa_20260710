@@ -28,11 +28,18 @@ int main(void)
      * int型の引数を2個受け取り、
      * int型を返す関数のポインタ配列
      */
+    // int (*func[KEISAN_SU])(int, int) = {
+    //     [TASU]   = tasu,
+    //     [HIKU]   = hiku,
+    //     [KAKERU] = kakeru,
+    //     [WARU]   = waru
+    // };
+
     int (*func[KEISAN_SU])(int, int) = {
-        [TASU]   = tasu,
-        [HIKU]   = hiku,
-        [KAKERU] = kakeru,
-        [WARU]   = waru
+        tasu,
+        hiku,
+        kakeru,
+        waru
     };
 
     printf("%d + %d = %d\n", a, b, func[TASU](a, b));
