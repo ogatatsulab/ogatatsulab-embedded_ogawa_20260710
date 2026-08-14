@@ -148,8 +148,8 @@ void init_gamen( void ) {
 void init_enemy( void ) {
   srand( (unsigned)time( NULL ) );
   for ( int i = 0; i < ENEMY_COUNT; i++ ) {    // 上から敵数行の間のランダム位置に敵を配置
-    enemy[ i ].col = rand() % (COL - 1) + 1;   // 2x2ブロック対応
-    enemy[ i ].line = rand() % (ENEMY_COUNT - 1) + 0;  // 2x2ブロック対応
+    enemy[ i ].col = rand() % COL + 1;
+    enemy[ i ].line = rand() % ENEMY_COUNT + 0;
     enemy[ i ].direction = rand() % 2 + 1;
     enemy[ i ].hit = 0;
     if ( ( rand() % 10 + 0 ) == 0 ) {          // 10%の確率でスペシャル敵が出現
@@ -223,8 +223,8 @@ void move_enemy( void ) {
 
 void move_enemy2( int i ) {
   if ( enemy[ i ].direction == 1 ) {               // 右方向に移動中
-    if ( enemy[ i ].col == COL - 1 ) {             // 右端なら（2x2ブロック対応）
-      if ( ++enemy[ i ].line > ( LINE - 3 ) ) {    // 一段下へ（最下部ならゲームセット、プレーヤー負け、2x2ブロック対応）
+    if ( enemy[ i ].col == COL ) {                 // 右端なら
+      if ( ++enemy[ i ].line > ( LINE - 2 ) ) {    // 一段下へ（最下部ならゲームセット、プレーヤー負け）
         flg_end = 2;
       } else {
         enemy[ i ].direction = 2;                  // 移動方向を左へ
@@ -234,7 +234,7 @@ void move_enemy2( int i ) {
     }
   } else if ( enemy[ i ].direction == 2 ) {        // 左方向に移動中
     if ( enemy[ i ].col == 1 ) {                   // 左端なら
-      if ( ++enemy[ i ].line > ( LINE - 3 ) ) {    // 一段下へ（最下部ならゲームセット、プレーヤー負け、2x2ブロック対応）
+      if ( ++enemy[ i ].line > ( LINE - 2 ) ) {    // 一段下へ（最下部ならゲームセット、プレーヤー負け）
         flg_end = 2;
       } else {
         enemy[ i ].direction = 1;                  // 移動方向を右へ
@@ -243,13 +243,7 @@ void move_enemy2( int i ) {
       enemy[ i ].col--;                            // 左へ移動
     }
   }
-  // 2x2ブロック表示
-  if ( enemy[ i ].col + 1 <= COL && enemy[ i ].line + 1 < LINE ) {
-    gamen[ enemy[ i ].line ][ enemy[ i ].col ] = '@';
-    gamen[ enemy[ i ].line ][ enemy[ i ].col + 1 ] = '@';
-    gamen[ enemy[ i ].line + 1 ][ enemy[ i ].col ] = '@';
-    gamen[ enemy[ i ].line + 1 ][ enemy[ i ].col + 1 ] = '@';
-  }
+  gamen[ enemy[ i ].line ][ enemy[ i ].col ] = enemy[ i ].symbol;
   return;
 }
 
@@ -303,15 +297,11 @@ void move_missile( void ) {
 // 当たり判定
 void judge_hit( void ) {
   for ( int i = 0; i < ENEMY_COUNT; i++ ) {
-    // 敵の2x2ブロック内にミサイルが当たったか判定
-    if ( enemy[ i ].hit == 0 ) {
-      if ( ( missile.col >= enemy[ i ].col && missile.col <= enemy[ i ].col + 1 ) &&
-           ( missile.line >= enemy[ i ].line && missile.line <= enemy[ i ].line + 1 ) ) {
-        if( ( ++hit_count >= ENEMY_COUNT ) || ( enemy[ i ].symbol == '$' ) ) {                                        // 全敵ヒットかスペシャル敵ならゲームセット（プレーヤー勝ち）
-          flg_end = 1;
-        }
-        enemy[ i ].hit = 1;
+    if ( ( enemy[ i ].hit == 0 ) && ( enemy[ i ].col == missile.col ) && ( enemy[ i ].line == missile.line ) ) {    // 敵とミサイルが同位置ならヒット
+      if( ( ++hit_count >= ENEMY_COUNT ) || ( enemy[ i ].symbol == '$' ) ) {                                        // 全敵ヒットかスペシャル敵ならゲームセット（プレーヤー勝ち）
+        flg_end = 1;
       }
+      enemy[ i ].hit = 1;
     }
   }
   return;
