@@ -90,6 +90,8 @@ void print_gamen( void );
 void* game_main( void* p );
 void move_enemy( void );
 void move_enemy2( int i );
+void draw_enemy_block( int i );
+int enemy_hit_check( int i, int line, int col );
 void move_player( void );
 void move_missile( void );
 void judge_hit( void );
@@ -243,8 +245,64 @@ void move_enemy2( int i ) {
       enemy[ i ].col--;                            // 左へ移動
     }
   }
-  gamen[ enemy[ i ].line ][ enemy[ i ].col ] = enemy[ i ].symbol;
+  draw_enemy_block( i );
   return;
+}
+
+
+
+void draw_enemy_block( int i ) {
+  int start_col = enemy[ i ].col;
+  int start_line = enemy[ i ].line;
+
+  if ( enemy[ i ].symbol == '$' ) {
+    gamen[ start_line ][ start_col ] = enemy[ i ].symbol;
+    return;
+  }
+
+  if ( start_col >= COL ) {
+    start_col = COL - 1;
+  }
+  if ( start_line >= LINE - 1 ) {
+    start_line = LINE - 2;
+  }
+
+  for ( int y = 0; y < 2; y++ ) {
+    for ( int x = 0; x < 2; x++ ) {
+      int row = start_line + y;
+      int col = start_col + x;
+      if ( row >= 0 && row < LINE && col >= 1 && col <= COL ) {
+        gamen[ row ][ col ] = '@';
+      }
+    }
+  }
+  return;
+}
+
+
+
+int enemy_hit_check( int i, int line, int col ) {
+  if ( enemy[ i ].symbol == '$' ) {
+    return ( enemy[ i ].line == line && enemy[ i ].col == col );
+  }
+
+  int start_col = enemy[ i ].col;
+  int start_line = enemy[ i ].line;
+  if ( start_col >= COL ) {
+    start_col = COL - 1;
+  }
+  if ( start_line >= LINE - 1 ) {
+    start_line = LINE - 2;
+  }
+
+  for ( int y = 0; y < 2; y++ ) {
+    for ( int x = 0; x < 2; x++ ) {
+      if ( ( start_line + y ) == line && ( start_col + x ) == col ) {
+        return 1;
+      }
+    }
+  }
+  return 0;
 }
 
 
@@ -297,7 +355,7 @@ void move_missile( void ) {
 // 当たり判定
 void judge_hit( void ) {
   for ( int i = 0; i < ENEMY_COUNT; i++ ) {
-    if ( ( enemy[ i ].hit == 0 ) && ( enemy[ i ].col == missile.col ) && ( enemy[ i ].line == missile.line ) ) {    // 敵とミサイルが同位置ならヒット
+    if ( ( enemy[ i ].hit == 0 ) && enemy_hit_check( i, missile.line, missile.col ) ) {    // 敵とミサイルが同位置ならヒット
       if( ( ++hit_count >= ENEMY_COUNT ) || ( enemy[ i ].symbol == '$' ) ) {                                        // 全敵ヒットかスペシャル敵ならゲームセット（プレーヤー勝ち）
         flg_end = 1;
       }
